@@ -95,20 +95,20 @@ public class Cart extends Entity {
         	djd.initialize(leader, mainBody, pos1, pos2);
         	djd.collideConnected = true;
         	djd.dampingRatio = 1.0f;
-        	djd.frequencyHz = 30;
+        	djd.frequencyHz = 7;
         	world.createJoint(djd);
         	
-//        	djd = new DistanceJointDef();
-//        	pos1 = leader.getPosition().clone();
-////        	pos1.x -= 1.25f;
-//        	pos2 = mainBody.getPosition().clone();
-//        	pos2.x += 1.25f;
-//        	pos2.y -= .25f;
-//        	djd.initialize(leader, mainBody, pos1, pos2);
-//        	djd.collideConnected = true;
-//        	djd.dampingRatio = 1.0f;
-//        	djd.frequencyHz = 30;
-//        	world.createJoint(djd);
+        	djd = new DistanceJointDef();
+        	pos1 = leader.getPosition().clone();
+//        	pos1.x -= 1.25f;
+        	pos2 = mainBody.getPosition().clone();
+        	pos2.x += 1.25f;
+        	pos2.y -= .25f;
+        	djd.initialize(leader, mainBody, pos1, pos2);
+        	djd.collideConnected = true;
+        	djd.dampingRatio = 1.0f;
+        	djd.frequencyHz = 7;
+        	world.createJoint(djd);
         }
         
 	}
@@ -140,7 +140,7 @@ public class Cart extends Entity {
 		g.translate(position.x*10, position.y*-10);
 		g.rotate(-mainBody.getAngle());
 		g.setColor(Color.red);
-		g.fillRect(-30, -5, 60, 10);
+		g.fillRect(-30, -40, 60, 45);
 		g.setColor(Color.blue);
 		g.fillRect(-30, -5, 5, 5);
 		g.rotate(mainBody.getAngle());

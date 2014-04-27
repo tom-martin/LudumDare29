@@ -37,9 +37,9 @@ public class Ground extends Entity {
 		Random r = new Random();
 		
 		List<Point2D.Float> ps = new ArrayList<Point2D.Float>();
-		int nextGap = (Math.round(r.nextFloat()*150))+150;
+		int nextGap = (Math.round(r.nextFloat()*300))+300;
 		for(int x = -HALF_WIDTH; x <= HALF_WIDTH; x += nextGap) {
-			float yVariance = (nextGap*0.75f);
+			float yVariance = (nextGap*0.9f);
 			ps.add(new Point2D.Float(x,(r.nextFloat()*(yVariance))-(yVariance / 2)));
 			nextGap = (Math.round(r.nextFloat()*75))+75;
 		}
