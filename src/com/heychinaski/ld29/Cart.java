@@ -35,6 +35,8 @@ public class Cart extends Entity {
 	private Image wheelImage;
 
 	private Image minecartImg;
+
+	private Image driverImg;
 	
 	public Body initialiseWheel(World world, float x, int groupIndex, float density) {
 		BodyDef bd = new BodyDef();
@@ -83,10 +85,11 @@ public class Cart extends Entity {
         return (RevoluteJoint) world.createJoint(wheelJointDef);
 	}
 
-	public Cart(World world, int x, int groupIndex, Body leader, Image wheelImage, Image minecartImg) {
+	public Cart(World world, int x, int groupIndex, Body leader, Image wheelImage, Image minecartImg, Image driverImg) {
 		super();
 		this.wheelImage = wheelImage;
 		this.minecartImg = minecartImg;
+		this.driverImg = driverImg;
 
         wheel1 = initialiseWheel(world, x-3f, groupIndex, leader == null ? .5f : 0.2f);
         wheel2 = initialiseWheel(world, x+3f, groupIndex, leader == null ? 1f : 0.3f);
@@ -156,6 +159,9 @@ public class Cart extends Entity {
 //		g.setColor(Color.blue);
 //		g.fillRect(-40, -5, 5, 5);
 		g.drawImage(minecartImg, -50, -40, 100, 44, null);
+		if(driverImg != null) {
+			g.drawImage(driverImg, -34, -124, 68, 84, null);	
+		}
 		g.rotate(mainBody.getAngle());
 		g.translate(-position.x*SCALE, position.y*SCALE);
 		

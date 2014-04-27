@@ -40,7 +40,9 @@ public class Game29 extends Game {
 				             "gem1.png",
 				             "gem2.png",
 				             "gem3.png",
-				             "gem4.png"};
+				             "gem4.png",
+				             "gem5.png",
+				             "driver.png"};
 	}
 
 	@Override
@@ -62,21 +64,22 @@ public class Game29 extends Game {
 	public void init() {		
 		Vec2 gravity = new Vec2(0.0f, -10.0f);
 		world = new World(gravity);
-		BufferedImage[] gems = new BufferedImage[] {imageManager.get("gem1.png"), imageManager.get("gem2.png"), imageManager.get("gem3.png"),imageManager.get("gem4.png")};
+		BufferedImage[] gems = new BufferedImage[] {imageManager.get("gem1.png"), imageManager.get("gem2.png"), imageManager.get("gem3.png"),imageManager.get("gem2.png"), imageManager.get("gem4.png"),imageManager.get("gem2.png"),imageManager.get("gem5.png"),imageManager.get("gem2.png")};
 		Ground entity = new Ground(world, imageManager.get("fgTile.png"), imageManager.get("sleeper.png"));
 		entities.add(entity);
 	    
-		int numCarts = 3;
+		int numCarts = 7;
 		int x = -440 + (numCarts * 9);
 		Image wheel = imageManager.get("wheel.png");
 		Image minecartImg = imageManager.get("minecart.png");
-		mainCart = new Cart(world, x, -1, null, wheel, minecartImg);
+		Image driverImg = imageManager.get("driver.png");
+		mainCart = new Cart(world, x, -1, null, wheel, minecartImg, driverImg);
 		entities.add(mainCart);
 		
 		Cart previousCart = mainCart;
 		for(int i = 0; i < numCarts; i++) {
 			x-= 9;
-			Cart cart = new Cart(world, x, -i, previousCart.mainBody, wheel, minecartImg);
+			Cart cart = new Cart(world, x, -i, previousCart.mainBody, wheel, minecartImg, null);
 			
 			if(i == (numCarts / 4)) {
 				camera = new EntityTrackingCamera(cart, this);
