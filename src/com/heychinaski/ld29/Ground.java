@@ -1,13 +1,8 @@
 package com.heychinaski.ld29;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.Paint;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
@@ -34,7 +29,7 @@ import com.heychinaski.engie.Game;
 
 public class Ground extends Entity {
 	
-	public static final int HALF_WIDTH = 5000;
+	public static final int HALF_WIDTH = 7500;
 
 	float difficulty = 1.0f;
 	
@@ -52,7 +47,7 @@ public class Ground extends Entity {
 		int x = 0;
 		for(x = -HALF_WIDTH; x <= HALF_WIDTH; x += nextGap) {
 			float yVariance = (nextGap*difficulty);
-			if(x < -((float)HALF_WIDTH * 0.5)) {
+			if(x < -((float)HALF_WIDTH * 0.5) || x > ((float)HALF_WIDTH * 0.75)) {
 				ps.add(new Point2D.Float(x,0));
 			} else {
 				ps.add(new Point2D.Float(x,(r.nextFloat()*(yVariance))-(yVariance / 2)));	
@@ -92,8 +87,8 @@ public class Ground extends Entity {
 			if(vCount >= 6 ||
 				(previousDiff != null && 
 		         previousDiff > currentDiff)) {
-				currentPolygon.addPoint(x, 250);
-				currentPolygon.addPoint(previousStart, 250);
+				currentPolygon.addPoint(x, 1024);
+				currentPolygon.addPoint(previousStart, 1024);
 				polygons.add(currentPolygon);
 				currentPolygon = null;
 				previousDiff = null;
@@ -101,7 +96,7 @@ public class Ground extends Entity {
 			
 			if(currentPolygon == null) {
 				currentPolygon = new Polygon();
-				currentPolygon.addPoint(x, 250);
+				currentPolygon.addPoint(x, 1024);
 				currentPolygon.addPoint(x, Math.round(y));
 				previousStart = x;
 				vCount = 2;
@@ -110,8 +105,8 @@ public class Ground extends Entity {
 			previousDiff = currentDiff;
 			previousY = y;
 		}
-		currentPolygon.addPoint(HALF_WIDTH, 250);
-		currentPolygon.addPoint(previousStart, 250);
+		currentPolygon.addPoint(HALF_WIDTH, 1024);
+		currentPolygon.addPoint(previousStart, 1024);
 		polygons.add(currentPolygon);
 	}
 	
@@ -171,7 +166,7 @@ public class Ground extends Entity {
 		if(cache == null) {
 			List<BufferedImage> cacheList = new ArrayList<BufferedImage>();
 			for(int x = -HALF_WIDTH; x < HALF_WIDTH; x+=1024) {
-				BufferedImage newCache = g.getDeviceConfiguration().createCompatibleImage(1024, 512, BufferedImage.BITMASK);
+				BufferedImage newCache = g.getDeviceConfiguration().createCompatibleImage(1024, 1536, BufferedImage.BITMASK);
 				Graphics2D cacheG = (Graphics2D) newCache.getGraphics();
 				cacheG.translate(x, 256);
 				

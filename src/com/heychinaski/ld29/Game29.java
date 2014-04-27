@@ -69,7 +69,7 @@ public class Game29 extends Game {
 		entities.add(entity);
 	    
 		int numCarts = 7;
-		int x = -440 + (numCarts * 9);
+		int x = -640 + (numCarts * 9);
 		Image wheel = imageManager.get("wheel.png");
 		Image minecartImg = imageManager.get("minecart.png");
 		Image driverImg = imageManager.get("driver.png");
@@ -80,10 +80,10 @@ public class Game29 extends Game {
 		for(int i = 0; i < numCarts; i++) {
 			x-= 9;
 			Cart cart = new Cart(world, x, -i, previousCart.mainBody, wheel, minecartImg, null);
-			
-			if(i == (numCarts / 4)) {
-				camera = new EntityTrackingCamera(cart, this);
-			}
+//			
+//			if(i == (numCarts / 4)) {
+//				camera = new EntityTrackingCamera(cart, this);
+//			}
 			
 			int numRes = (int)(Math.random()*10)+5;
 			for(int j = 0; j < numRes; j++) {
@@ -103,7 +103,7 @@ public class Game29 extends Game {
 		debug = new DebugDrawJava2D(null);
 		debug.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
 		world.setDebugDraw(debug);
-		camera.zoom = 1;
+		camera.zoom = 1f;
 	}
 	
 	
