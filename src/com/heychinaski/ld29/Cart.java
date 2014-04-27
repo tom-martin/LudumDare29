@@ -1,6 +1,5 @@
 package com.heychinaski.ld29;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D.Float;
@@ -13,11 +12,9 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.joints.DistanceJoint;
 import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
-import org.jbox2d.dynamics.joints.WheelJointDef;
 
 import com.heychinaski.engie.Entity;
 import com.heychinaski.engie.Game;
@@ -41,7 +38,7 @@ public class Cart extends Entity {
 	public Body initialiseWheel(World world, float x, int groupIndex, float density) {
 		BodyDef bd = new BodyDef();
         bd.type = BodyType.DYNAMIC;
-        bd.position.set(x, 10);
+        bd.position.set(x, 8);
 
         CircleShape cs = new CircleShape();
         cs.m_radius = 1.2f;
@@ -60,7 +57,7 @@ public class Cart extends Entity {
 	public Body initialiseMain(World world, float x, int groupIndex, float density) {
 		BodyDef bd = new BodyDef();
         bd.type = BodyType.DYNAMIC;
-        bd.position.set(x, 10);
+        bd.position.set(x, 8);
 
         PolygonShape ps = new PolygonShape();
         ps.setAsBox(4f, 0.5f);

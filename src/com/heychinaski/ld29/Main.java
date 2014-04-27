@@ -16,7 +16,7 @@ public class Main {
    * @param args
    */
   public static void main(String[] args) {
-    JFrame mainWindow = new JFrame("LD29 Untitled");
+    JFrame mainWindow = new JFrame("Miner Matter LD29 by HeyChinaski");
     JPanel panel = (JPanel) mainWindow.getContentPane();
     
     panel.setPreferredSize(new Dimension(1024, 768));

@@ -31,7 +31,7 @@ public class Ground extends Entity {
 	
 	public static final int HALF_WIDTH = 7500;
 
-	float difficulty = 1.0f;
+	float difficulty = 0.2f;
 	
 	Point2D.Float[] points = new Point2D.Float[0];
 	private PolynomialSplineFunction splineFunc;
@@ -40,7 +40,21 @@ public class Ground extends Entity {
 		w = HALF_WIDTH;
 		h = HALF_WIDTH;
 		
-		Random r = new Random();
+		
+	}
+	
+	World world;
+
+	private BufferedImage[] cache;
+
+	private BufferedImage fgTile;
+
+	private BufferedImage sleeper;
+	
+	public Ground(World world, BufferedImage fgTile, BufferedImage sleeper, float difficulty, long seed) {
+		super();
+		this.difficulty = difficulty;
+		Random r = new Random(seed);
 		
 		List<Point2D.Float> ps = new ArrayList<Point2D.Float>();
 		int nextGap = (Math.round(r.nextFloat()*225))+225;
@@ -107,18 +121,7 @@ public class Ground extends Entity {
 		currentPolygon.addPoint(HALF_WIDTH, 1024);
 		currentPolygon.addPoint(previousStart, 1024);
 		polygons.add(currentPolygon);
-	}
-	
-	World world;
-
-	private BufferedImage[] cache;
-
-	private BufferedImage fgTile;
-
-	private BufferedImage sleeper;
-	
-	public Ground(World world, BufferedImage fgTile, BufferedImage sleeper) {
-		super();
+		
 		this.world = world;
 		this.fgTile = scaleImage(fgTile);
 		this.sleeper = scaleImage(sleeper);
@@ -129,11 +132,11 @@ public class Ground extends Entity {
 		    for(int j = 0; j < p.npoints; j++) {
 		    	vs[j] = new Vec2(((float)p.xpoints[j]) * 0.1f, ((float)p.ypoints[j]) * -0.1f);
 		    }
-		    PolygonShape ps = new PolygonShape();
-		    ps.set(vs, vs.length);
+		    PolygonShape pShape = new PolygonShape();
+		    pShape.set(vs, vs.length);
 		         
 		    FixtureDef fd = new FixtureDef();
-		    fd.shape = ps;
+		    fd.shape = pShape;
 		    fd.friction = 100f;      
 		 
 		    BodyDef bd = new BodyDef();
