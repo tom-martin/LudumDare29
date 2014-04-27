@@ -160,7 +160,7 @@ public class Cart extends Entity {
 //		g.fillRect(-40, -5, 5, 5);
 		g.drawImage(minecartImg, -50, -40, 100, 44, null);
 		if(driverImg != null) {
-			g.drawImage(driverImg, -34, -124, 68, 84, null);	
+			g.drawImage(driverImg, -28, -112, 56, 72, null);	
 		}
 		g.rotate(mainBody.getAngle());
 		g.translate(-position.x*SCALE, position.y*SCALE);

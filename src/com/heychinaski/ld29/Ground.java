@@ -55,8 +55,7 @@ public class Ground extends Entity {
 			nextGap = (Math.round(r.nextFloat()*225))+225;
 		}
 		
-		float yVariance = ((HALF_WIDTH - x)  * difficulty);
-		ps.add(new Point2D.Float(HALF_WIDTH,(r.nextFloat()*(yVariance))-(yVariance / 2)));
+		ps.add(new Point2D.Float(HALF_WIDTH,0));
 		
 		points = ps.toArray(points);
 		
