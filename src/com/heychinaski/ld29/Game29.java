@@ -33,7 +33,9 @@ public class Game29 extends Game {
 	@Override
 	public String[] images() {
 		return new String[] {"wheel.png",
-				             "minecart.png"};
+				             "minecart.png",
+				             "bgTile.png",
+				             "fgTile.png"};
 	}
 
 	@Override
@@ -43,7 +45,12 @@ public class Game29 extends Game {
 
 	@Override
 	public Image bgTileImage() {
-		return null;
+		return imageManager.get("bgTile.png");
+	}
+	
+	@Override
+	public int bgTileScale() {
+		return 4;
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class Game29 extends Game {
 		Vec2 gravity = new Vec2(0.0f, -10.0f);
 		world = new World(gravity);
 		
-		Ground entity = new Ground(world);
+		Ground entity = new Ground(world, imageManager.get("fgTile.png"));
 		entities.add(entity);	
 	    
 		int numCarts = 7;

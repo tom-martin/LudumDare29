@@ -1,9 +1,14 @@
 package com.heychinaski.ld29;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.TexturePaint;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -109,10 +114,19 @@ public class Ground extends Entity {
 	World world;
 
 	private BufferedImage[] cache;
+
+	private BufferedImage fgTile;
 	
-	public Ground(World world) {
+	public Ground(World world, BufferedImage fgTile) {
 		super();
 		this.world = world;
+		GraphicsConfiguration gc = GraphicsEnvironment.
+		  		getLocalGraphicsEnvironment().getDefaultScreenDevice().
+		  		getDefaultConfiguration();
+		this.fgTile = gc.createCompatibleImage(fgTile.getWidth()*4, fgTile.getHeight()*4, BufferedImage.BITMASK);
+		Graphics2D g = (Graphics2D)this.fgTile.getGraphics();
+		g.drawImage(fgTile, 0, 0, fgTile.getWidth()*4, fgTile.getHeight()*4, null);
+		g.dispose();
 		
 		for(int i = 0; i < polygons.size(); i++) {
 		    Polygon p = polygons.get(i);
@@ -145,21 +159,21 @@ public class Ground extends Entity {
 		if(cache == null) {
 			List<BufferedImage> cacheList = new ArrayList<BufferedImage>();
 			for(int x = -HALF_WIDTH; x < HALF_WIDTH; x+=1024) {
-				BufferedImage newCache = g.getDeviceConfiguration().createCompatibleImage(1024, 512);
+				BufferedImage newCache = g.getDeviceConfiguration().createCompatibleImage(1024, 512, BufferedImage.BITMASK);
 				Graphics2D cacheG = (Graphics2D) newCache.getGraphics();
 				cacheG.translate(x, 256);
 				
-				cacheG.setColor(Color.YELLOW);
+				cacheG.setPaint(new TexturePaint(fgTile, new Rectangle(0, 0, 256, 256)));
+				
+//				cacheG.setColor(Color.YELLOW);
 				for(int i = 0; i < polygons.size(); i+=2) {
 					Polygon p = polygons.get(i);
-					Rectangle b = p.getBounds();
 				
 					cacheG.fill(p);
 				}
-				cacheG.setColor(Color.WHITE);
+//				cacheG.setColor(Color.WHITE);
 				for(int i = 1; i < polygons.size(); i+=2) {
 					Polygon p = polygons.get(i);
-					Rectangle b = p.getBounds();
 					
 					cacheG.fill(p);
 				}
