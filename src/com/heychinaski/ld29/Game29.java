@@ -1,8 +1,11 @@
 package com.heychinaski.ld29;
 
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import org.jbox2d.callbacks.DebugDraw;
 import org.jbox2d.common.Vec2;
@@ -21,16 +24,16 @@ public class Game29 extends Game {
 	private World world;
 
 	private Cart mainCart;
-	private Cart cart2;
-	private Cart cart3;
 
 	private DebugDrawJava2D debug;
 
 	private float time;
+	float timeStep = 1.0f / 60.f;
 
 	@Override
 	public String[] images() {
-		return new String[] {};
+		return new String[] {"wheel.png",
+				             "minecart.png"};
 	}
 
 	@Override
@@ -44,9 +47,7 @@ public class Game29 extends Game {
 	}
 
 	@Override
-	public void init() {
-
-		
+	public void init() {		
 		Vec2 gravity = new Vec2(0.0f, -10.0f);
 		world = new World(gravity);
 		
@@ -54,19 +55,26 @@ public class Game29 extends Game {
 		entities.add(entity);	
 	    
 		int numCarts = 7;
-		int x = -900 + (numCarts * 7);
-		mainCart = new Cart(world, x, -1, null);
+		int x = -440 + (numCarts * 9);
+		Image wheel = imageManager.get("wheel.png");
+		Image minecartImg = imageManager.get("minecart.png");
+		mainCart = new Cart(world, x, -1, null, wheel, minecartImg);
 		entities.add(mainCart);
 		
 		Cart previousCart = mainCart;
 		for(int i = 0; i < numCarts; i++) {
-			x-= 7;
-			Cart cart = new Cart(world, x, -2, previousCart.mainBody);
+			x-= 9;
+			Cart cart = new Cart(world, x, -i, previousCart.mainBody, wheel, minecartImg);
 			entities.add(cart);
 			
 			if(i == (numCarts / 4)) {
 				camera = new EntityTrackingCamera(cart, this);
 			}
+			previousCart = cart;
+		}
+		
+		if(camera == null) {
+			camera = new EntityTrackingCamera(mainCart, this);
 		}
 		
 		
@@ -74,6 +82,7 @@ public class Game29 extends Game {
 		debug = new DebugDrawJava2D(null);
 		debug.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
 		world.setDebugDraw(debug);
+		camera.zoom = 1;
 	}
 	
 	
@@ -93,20 +102,23 @@ public class Game29 extends Game {
 			mainCart.goRight(tick*50);
 		}
 		
-		if(!input.isKeyDown(KeyEvent.VK_D) && !input.isKeyDown(KeyEvent.VK_D)) {
+		if(!input.isKeyDown(KeyEvent.VK_A) && !input.isKeyDown(KeyEvent.VK_D)) {
 			mainCart.dontGo();
 		}
 		
-		float timeStep = 1.0f / 60.f;
+		
+		int sleep = (int)((timeStep - tick) * 1000);
+		if(sleep > 0) {
+			try {
+				System.out.println("Sleeping for "+sleep+" ("+(1f/time)+")");
+				Thread.sleep(sleep);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		world.step(timeStep, 6, 3);
 		super.update(tick);
-		
-		try {
-			Thread.sleep((int)(timeStep - tick) * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
@@ -115,5 +127,4 @@ public class Game29 extends Game {
 //		debug.setGraphics2D((Graphics2D) g.create());
 //		world.drawDebugData();
 	}
-
 }
