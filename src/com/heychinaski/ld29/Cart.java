@@ -23,7 +23,7 @@ import com.heychinaski.engie.Entity;
 import com.heychinaski.engie.Game;
 
 public class Cart extends Entity {
-	int SCALE = 10;
+	public static final int SCALE = 10;
 
 	final Body wheel1;
 	final Body wheel2;

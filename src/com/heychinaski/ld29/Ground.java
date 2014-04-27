@@ -175,7 +175,6 @@ public class Ground extends Entity {
 				Graphics2D cacheG = (Graphics2D) newCache.getGraphics();
 				cacheG.translate(x, 256);
 				
-				Paint previous = cacheG.getPaint();
 				cacheG.setPaint(new TexturePaint(fgTile, new Rectangle(0, 0, 256, 256)));
 				
 				for(int i = 0; i < polygons.size(); i++) {

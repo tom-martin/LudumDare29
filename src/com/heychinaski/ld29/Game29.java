@@ -36,7 +36,11 @@ public class Game29 extends Game {
 				             "minecart.png",
 				             "bgTile.png",
 				             "fgTile.png",
-				             "sleeper.png"};
+				             "sleeper.png",
+				             "gem1.png",
+				             "gem2.png",
+				             "gem3.png",
+				             "gem4.png"};
 	}
 
 	@Override
@@ -58,11 +62,11 @@ public class Game29 extends Game {
 	public void init() {		
 		Vec2 gravity = new Vec2(0.0f, -10.0f);
 		world = new World(gravity);
-		
+		BufferedImage[] gems = new BufferedImage[] {imageManager.get("gem1.png"), imageManager.get("gem2.png"), imageManager.get("gem3.png"),imageManager.get("gem4.png")};
 		Ground entity = new Ground(world, imageManager.get("fgTile.png"), imageManager.get("sleeper.png"));
-		entities.add(entity);	
+		entities.add(entity);
 	    
-		int numCarts = 7;
+		int numCarts = 3;
 		int x = -440 + (numCarts * 9);
 		Image wheel = imageManager.get("wheel.png");
 		Image minecartImg = imageManager.get("minecart.png");
@@ -73,18 +77,24 @@ public class Game29 extends Game {
 		for(int i = 0; i < numCarts; i++) {
 			x-= 9;
 			Cart cart = new Cart(world, x, -i, previousCart.mainBody, wheel, minecartImg);
-			entities.add(cart);
 			
 			if(i == (numCarts / 4)) {
 				camera = new EntityTrackingCamera(cart, this);
 			}
+			
+			int numRes = (int)(Math.random()*10)+5;
+			for(int j = 0; j < numRes; j++) {
+				Resource resource = new Resource(cart, gems[j % gems.length]);
+				entities.add(resource);
+			}
+			entities.add(cart);
+			
 			previousCart = cart;
 		}
 		
 		if(camera == null) {
 			camera = new EntityTrackingCamera(mainCart, this);
 		}
-		
 		
 		
 		debug = new DebugDrawJava2D(null);
@@ -97,7 +107,7 @@ public class Game29 extends Game {
 	@Override
 	public void update(float tick) {
 		time = (time * 0.9f) + (tick * 0.1f);
-		if(Math.random() > 0.9) System.out.println(1f/time);
+//		if(Math.random() > 0.9) System.out.println(1f/time);
 		if(input.isKeyDown(KeyEvent.VK_ESCAPE)) {
 			System.exit(0);
 		}
@@ -118,7 +128,7 @@ public class Game29 extends Game {
 		int sleep = (int)((timeStep - tick) * 1000);
 		if(sleep > 0) {
 			try {
-				System.out.println("Sleeping for "+sleep+" ("+(1f/time)+")");
+//				System.out.println("Sleeping for "+sleep+" ("+(1f/time)+")");
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -126,7 +136,7 @@ public class Game29 extends Game {
 			}
 		}
 		world.step(timeStep, 6, 3);
-		super.update(tick);
+		super.update(timeStep);
 	}
 	
 	@Override
