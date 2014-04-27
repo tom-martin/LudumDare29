@@ -1,10 +1,12 @@
 package com.heychinaski.ld29;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -23,7 +25,7 @@ import com.heychinaski.engie.Game;
 
 public class Ground extends Entity {
 	
-	public static final int HALF_WIDTH = 1000;
+	public static final int HALF_WIDTH = 10000;
 
 	Point2D.Float[] points = new Point2D.Float[0];
 	private PolynomialSplineFunction splineFunc;
@@ -97,6 +99,8 @@ public class Ground extends Entity {
 	}
 	
 	World world;
+
+	private BufferedImage cache;
 	
 	public Ground(World world) {
 		super();
@@ -130,19 +134,29 @@ public class Ground extends Entity {
 
 	@Override
 	public void render(Graphics2D g, Game game) {
-		g.setColor(Color.YELLOW);
-		for(int i = 0; i < polygons.size(); i+=2) {
-			g.fill(polygons.get(i));
+		if(cache == null) {
+			System.out.println("Rendering");
+			cache = g.getDeviceConfiguration().createCompatibleImage(HALF_WIDTH * 2, 500);
+			
+			Graphics2D cacheG = (Graphics2D) cache.getGraphics();
+			cacheG.translate(HALF_WIDTH, 250);
+			
+			cacheG.setColor(Color.YELLOW);
+			for(int i = 0; i < polygons.size(); i+=2) {
+				cacheG.fill(polygons.get(i));
+			}
+			cacheG.setColor(Color.WHITE);
+			for(int i = 1; i < polygons.size(); i+=2) {
+				cacheG.fill(polygons.get(i));
+			}
+			for(int i = 0; i < points.length; i++) {
+				Point2D.Float p = points[i];
+				cacheG.setColor(Color.GREEN);
+				cacheG.fillRect(Math.round(p.x-5), Math.round(p.y-5), 10, 10);
+			}
 		}
-		g.setColor(Color.WHITE);
-		for(int i = 1; i < polygons.size(); i+=2) {
-			g.fill(polygons.get(i));
-		}
-		for(int i = 0; i < points.length; i++) {
-			Point2D.Float p = points[i];
-			g.setColor(Color.GREEN);
-			g.fillRect(Math.round(p.x-5), Math.round(p.y-5), 10, 10);
-		}
+		
+		g.drawImage(cache, -HALF_WIDTH, -250, null);
 	}
 
 	@Override

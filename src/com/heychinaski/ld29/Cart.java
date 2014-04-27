@@ -162,15 +162,15 @@ public class Cart extends Entity {
 
 	public void goLeft(float amount) {
 		joint1.enableMotor(true);
-		joint1.setMotorSpeed(15);
+		joint1.setMotorSpeed(20);
 		joint2.enableMotor(true);
-		joint2.setMotorSpeed(15);
+		joint2.setMotorSpeed(20);
 	}
 	
 	public void goRight(float amount) {
 		joint1.enableMotor(true);
-		joint1.setMotorSpeed(-15);
+		joint1.setMotorSpeed(-20);
 		joint2.enableMotor(true);
-		joint2.setMotorSpeed(-15);
+		joint2.setMotorSpeed(-20);
 	}
 }

@@ -26,6 +26,8 @@ public class Game29 extends Game {
 
 	private DebugDrawJava2D debug;
 
+	private float time;
+
 	@Override
 	public String[] images() {
 		return new String[] {};
@@ -52,7 +54,7 @@ public class Game29 extends Game {
 		entities.add(entity);	
 	    
 		int numCarts = 7;
-		int x = -90 + (numCarts * 7);
+		int x = -900 + (numCarts * 7);
 		mainCart = new Cart(world, x, -1, null);
 		entities.add(mainCart);
 		
@@ -77,6 +79,8 @@ public class Game29 extends Game {
 	
 	@Override
 	public void update(float tick) {
+		time = (time * 0.9f) + (tick * 0.1f);
+		if(Math.random() > 0.9) System.out.println(1f/time);
 		if(input.isKeyDown(KeyEvent.VK_ESCAPE)) {
 			System.exit(0);
 		}
