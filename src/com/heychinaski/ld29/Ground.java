@@ -1,11 +1,13 @@
 package com.heychinaski.ld29;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Paint;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
@@ -18,6 +20,8 @@ import java.util.Random;
 
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+import org.apache.commons.math3.geometry.euclidean.twod.Line;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -116,17 +120,14 @@ public class Ground extends Entity {
 	private BufferedImage[] cache;
 
 	private BufferedImage fgTile;
+
+	private BufferedImage sleeper;
 	
-	public Ground(World world, BufferedImage fgTile) {
+	public Ground(World world, BufferedImage fgTile, BufferedImage sleeper) {
 		super();
 		this.world = world;
-		GraphicsConfiguration gc = GraphicsEnvironment.
-		  		getLocalGraphicsEnvironment().getDefaultScreenDevice().
-		  		getDefaultConfiguration();
-		this.fgTile = gc.createCompatibleImage(fgTile.getWidth()*4, fgTile.getHeight()*4, BufferedImage.BITMASK);
-		Graphics2D g = (Graphics2D)this.fgTile.getGraphics();
-		g.drawImage(fgTile, 0, 0, fgTile.getWidth()*4, fgTile.getHeight()*4, null);
-		g.dispose();
+		this.fgTile = scaleImage(fgTile);
+		this.sleeper = scaleImage(sleeper);
 		
 		for(int i = 0; i < polygons.size(); i++) {
 		    Polygon p = polygons.get(i);
@@ -149,6 +150,17 @@ public class Ground extends Entity {
 		}
 	}
 
+	private BufferedImage scaleImage(BufferedImage i) {
+		GraphicsConfiguration gc = GraphicsEnvironment.
+		  		getLocalGraphicsEnvironment().getDefaultScreenDevice().
+		  		getDefaultConfiguration();
+		BufferedImage si  = gc.createCompatibleImage(i.getWidth()*4, i.getHeight()*4, BufferedImage.BITMASK);
+		Graphics2D g = (Graphics2D)si.getGraphics();
+		g.drawImage(i, 0, 0, i.getWidth()*4, i.getHeight()*4, null);
+		g.dispose();
+		return si;
+	}
+
 	@Override
 	public void update(float tick, Game game) {
 		
@@ -163,25 +175,41 @@ public class Ground extends Entity {
 				Graphics2D cacheG = (Graphics2D) newCache.getGraphics();
 				cacheG.translate(x, 256);
 				
+				Paint previous = cacheG.getPaint();
 				cacheG.setPaint(new TexturePaint(fgTile, new Rectangle(0, 0, 256, 256)));
 				
-//				cacheG.setColor(Color.YELLOW);
-				for(int i = 0; i < polygons.size(); i+=2) {
-					Polygon p = polygons.get(i);
-				
-					cacheG.fill(p);
-				}
-//				cacheG.setColor(Color.WHITE);
-				for(int i = 1; i < polygons.size(); i+=2) {
+				for(int i = 0; i < polygons.size(); i++) {
 					Polygon p = polygons.get(i);
 					
 					cacheG.fill(p);
 				}
-				for(int i = 0; i < points.length; i++) {
-					Point2D.Float p = points[i];
-					cacheG.setColor(Color.GREEN);
-					cacheG.fillRect(Math.round(p.x-5), Math.round(p.y-5), 10, 10);
+				
+				for(int sx = -HALF_WIDTH; sx < HALF_WIDTH; sx+= sleeper.getWidth()*2) {
+					int x1 = sx - sleeper.getWidth()/2;
+					int x2 = sx + sleeper.getWidth()/2;
+					
+					if(x1 > -HALF_WIDTH && x2 < HALF_WIDTH) {
+					
+						int y1 = (int) Math.round(splineFunc.value(x1));
+						int y2 = (int) Math.round(splineFunc.value(x2));
+						
+						Vector2D l1 = new Vector2D(x1, y1);
+						Vector2D l2 = new Vector2D(x2, y2);
+						Vector2D mid = new Vector2D(l1.getX() + (l2.getX() - l1.getX()), l1.getY() + (l2.getY() - l1.getY()));
+						Line line = new Line(l1, l2);
+						cacheG.translate(mid.getX(), mid.getY());
+						cacheG.rotate(line.getAngle());
+						cacheG.drawImage(sleeper, -sleeper.getWidth()/2, -(sleeper.getHeight()/2), null);
+						cacheG.rotate(-line.getAngle());
+						cacheG.translate(-mid.getX(), -mid.getY());
+					}
 				}
+
+//				for(int i = 0; i < points.length; i++) {
+//					Point2D.Float p = points[i];
+//					cacheG.setColor(Color.GREEN);
+//					cacheG.fillRect(Math.round(p.x-5), Math.round(p.y-5), 10, 10);
+//				}
 				cacheG.dispose();
 				cacheList.add(newCache);
 			}
