@@ -34,6 +34,12 @@ public class Cart extends Entity {
 	private Image minecartImg;
 
 	private Image driverImg;
+
+	private Image driverBackImg;
+
+	private Image driverForwardImg;
+
+	private Image currentDriverImg;
 	
 	public Body initialiseWheel(World world, float x, int groupIndex, float density) {
 		BodyDef bd = new BodyDef();
@@ -82,11 +88,15 @@ public class Cart extends Entity {
         return (RevoluteJoint) world.createJoint(wheelJointDef);
 	}
 
-	public Cart(World world, int x, int groupIndex, Body leader, Image wheelImage, Image minecartImg, Image driverImg) {
+	public Cart(World world, int x, int groupIndex, Body leader, Image wheelImage, Image minecartImg, Image driverBackImg, Image driverImg, Image driverForwardImg) {
 		super();
 		this.wheelImage = wheelImage;
 		this.minecartImg = minecartImg;
 		this.driverImg = driverImg;
+		this.driverBackImg = driverBackImg;
+		this.driverForwardImg = driverForwardImg;
+		
+		this.currentDriverImg = driverImg;
 
         wheel1 = initialiseWheel(world, x-3f, groupIndex, leader == null ? .5f : 0.2f);
         wheel2 = initialiseWheel(world, x+3f, groupIndex, leader == null ? 1f : 0.3f);
@@ -156,8 +166,8 @@ public class Cart extends Entity {
 //		g.setColor(Color.blue);
 //		g.fillRect(-40, -5, 5, 5);
 		g.drawImage(minecartImg, -50, -40, 100, 44, null);
-		if(driverImg != null) {
-			g.drawImage(driverImg, -28, -112, 56, 72, null);	
+		if(currentDriverImg != null) {
+			g.drawImage(currentDriverImg, -28, -112, 56, 72, null);	
 		}
 		g.rotate(mainBody.getAngle());
 		g.translate(-position.x*SCALE, position.y*SCALE);
@@ -177,6 +187,8 @@ public class Cart extends Entity {
 		joint2.enableMotor(false);
 		joint1.setMotorSpeed(0);
 		joint2.setMotorSpeed(0);
+		
+		currentDriverImg = driverImg;
 	}
 
 	public void goLeft(float amount) {
@@ -184,6 +196,8 @@ public class Cart extends Entity {
 		joint1.setMotorSpeed(200);
 		joint2.enableMotor(true);
 		joint2.setMotorSpeed(200);
+		
+		currentDriverImg = driverBackImg;
 	}
 	
 	public void goRight(float amount) {
@@ -191,5 +205,7 @@ public class Cart extends Entity {
 		joint1.setMotorSpeed(-200);
 		joint2.enableMotor(true);
 		joint2.setMotorSpeed(-200);
+		
+		currentDriverImg = driverForwardImg;
 	}
 }

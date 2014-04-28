@@ -16,6 +16,7 @@ import com.heychinaski.engie.Entity;
 import com.heychinaski.engie.Game;
 import com.heychinaski.engie.camera.Camera;
 import com.heychinaski.engie.camera.EntityTrackingCamera;
+import com.heychinaski.engie.collision.CollisionManager;
 import com.heychinaski.engie.render.BackgroundTile;
 
 public class Game29 extends Game {
@@ -72,7 +73,9 @@ public class Game29 extends Game {
 				             "gem3.png",
 				             "gem4.png",
 				             "gem5.png",
+				             "driverBack.png",
 				             "driver.png",
+				             "driverForward.png",
 				             "gempile.png",
 				             "alphabet.png",
 				             "title.png"};
@@ -101,6 +104,7 @@ public class Game29 extends Game {
 	}
 
 	public void init(Level level) {
+		collisionManager = null;
 		this.bgTile = new BackgroundTile(imageManager.get(level.bgTile), bgTileScale());
 		entities = new ArrayList<Entity>();
 		endzone = false;
@@ -122,15 +126,14 @@ public class Game29 extends Game {
 		int x = -640 + (numCarts * 9);
 		Image wheel = imageManager.get("wheel.png");
 		Image minecartImg = imageManager.get("minecart.png");
-		Image driverImg = imageManager.get("driver.png");
-		mainCart = new Cart(world, x, -1, null, wheel, minecartImg, driverImg);
+		mainCart = new Cart(world, x, -1, null, wheel, minecartImg, imageManager.get("driverBack.png"), imageManager.get("driver.png"), imageManager.get("driverForward.png"));
 		entities.add(mainCart);
 		
 		otherCarts = new ArrayList<Cart>();
 		Cart previousCart = mainCart;
 		for(int i = 0; i < numCarts; i++) {
 			x-= 9;
-			Cart cart = new Cart(world, x, -i, previousCart.mainBody, wheel, minecartImg, null);
+			Cart cart = new Cart(world, x, -i, previousCart.mainBody, wheel, minecartImg, null, null, null);
 //			
 //			if(i == (numCarts / 4)) {
 //				camera = new EntityTrackingCamera(cart, this);
@@ -296,10 +299,10 @@ public class Game29 extends Game {
 				drawText(100, getHeight() / 2, "PRESS A TO SLOW DOWN/REVERSE", g);
 				drawText(100, (getHeight() / 2)+24, "PRESS SPACE TO START", g);
 			} else if(endzone) {
-				if(!timeout) drawText(50, (getHeight() / 2)-24, "FULL CARTS: "+score+"/"+numCarts, g);
+				if(!timeout) drawText(10, (getHeight() / 2)-24, "FULL CARTS: "+score+"/"+numCarts, g);
 				if(!timeout && score >= quota) {
 					if(levelIndex == Level.levels.length - 1) {
-						drawText(10, getHeight() / 2 - 24, "GAME "+(levelIndex+1)+" COMPLETE. SCORE: "+totalScore, g);
+						drawText(10, getHeight() / 2 - 24, "GAME COMPLETE. SCORE: "+totalScore, g);
 						drawText(10, getHeight() / 2, "PRESS SPACE TO START OVER", g);
 					} else {
 						drawText(10, getHeight() / 2, "LEVEL "+(levelIndex+1)+" COMPLETE. PRESS SPACE FOR LEVEL "+(levelIndex+2), g);

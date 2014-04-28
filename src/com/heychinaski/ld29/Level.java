@@ -30,8 +30,8 @@ public class Level {
 		new Level(5, 3, 5, 0.7f, 70, "bgTile2.png", "fgTile3.png"),
 		new Level(6, 3, 6, 0.8f, 90, "bgTile.png", "fgTile3.png"),
 		new Level(6, 3, 7, 0.9f, 90, "bgTile3.png", "fgTile.png"),
-		new Level(6, 4, 8, 1.0f, 90, "bgTile.png", "fgTile2.png"),
-		new Level(6, 6, 9, 1.0f, 90, "bgTile.png", "fgTile.png")
+		new Level(6, 4, 8, 1.0f, 100, "bgTile.png", "fgTile2.png"),
+		new Level(6, 6, 9, 1.0f, 80, "bgTile.png", "fgTile.png")
 	};
 }
 

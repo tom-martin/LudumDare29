@@ -31,7 +31,7 @@ public class GemPile extends Entity {
         bd.position.set((x*0.1f)+30, 10);
 
         PolygonShape ps = new PolygonShape();
-        ps.setAsBox(2f, 100f);
+        ps.setAsBox(10f, 200f);
         
         FixtureDef fd = new FixtureDef();
         fd.shape = ps;
